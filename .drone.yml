@@ -1,0 +1,79 @@
+kind: pipeline
+type: docker
+name: Deploy
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+
+- name: Fix drone limitation
+  image: drone/git
+  commands:
+  - |
+      if [ "$(git symbolic-ref --short HEAD)" != "master" ]; then
+        git fetch origin master:master
+      fi
+
+  - git fetch --tags
+  - chown -R 1000:1000 .
+
+- name: Lint
+  image: python:3.13
+  commands:
+  - pip install --upgrade pip uv
+  - uv run isort --check src
+  - uv run black --check src
+  - uv run ruff check src
+  - uv run mypy src
+  - uv run pytype src
+
+- name: Test
+  image: python:3.13
+  commands:
+  - pip install --upgrade pip uv
+  - uv run main.py --version
+
+- name: Build
+  image: python:3.13
+  commands:
+  - pip install --upgrade pip
+  - pip install build
+  - python -m build
+
+- name: Publish to Test PyPI
+  image: python:3.13
+  environment:
+    username:
+      from_secret: test_pypi_username
+    password:
+      from_secret: test_pypi_password
+  when:
+    event: tag
+  commands:
+  - pip install --upgrade pip uv
+  - >
+    uv publish
+    --publish-url https://test.pypi.org/legacy/
+    --check-url https://test.pypi.org/simple/
+    --username="$username" --password="$password"
+    --verbose
+
+- name: Publish to PyPI
+  image: python:3.13
+  environment:
+    username:
+      from_secret: pypi_username
+    password:
+      from_secret: pypi_password
+  when:
+    event: tag
+  commands:
+  - pip install --upgrade pip uv
+  - >
+    uv publish
+    --publish-url https://upload.pypi.org/legacy/
+    --check-url https://pypi.org/simple/
+    --username="$username" --password="$password"
+    --verbose

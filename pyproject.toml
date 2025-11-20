@@ -1,0 +1,139 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vrachos"
+authors = [
+        {name = "Kanelis Elias", email = "e.kanelis@voidbuffer.com"},
+]
+maintainers = [
+        {name = "Kanelis Elias", email = "e.kanelis@voidbuffer.com"},
+]
+readme = "README.md"
+description = "Because your code deserves a solid foundation."
+requires-python = ">=3.13"
+keywords = ["framework", "cli", "logging", "model"]
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.13',
+]
+dynamic = ["version"]
+dependencies = [
+    "click>=8.3.1",
+    "pydantic>=2.12.4",
+    "requests>=2.32.5",
+    "rich>=14.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.11.0",
+    "mypy>=1.18.2",
+    "pytest>=9.0.1",
+    "pytype>=2024.10.11",
+    "ruff>=0.14.5",
+    "types-requests>=2.32.4.20250913",
+    "typos>=1.39.2",
+]
+
+[project.urls]
+Homepage = "https://pypi.org/project/vrachos/"
+
+[tool.hatch.version]
+source = "vcs"
+style = "semver"
+
+# -----------------------------
+
+# black
+
+[tool.black]
+line-length = 79
+target-version = ["py313"]
+skip-string-normalization = false
+
+# -----------------------------
+
+# isort
+
+[tool.isort]
+profile = "black"
+line_length = 79
+multi_line_output = 3  # Black-compatible
+include_trailing_comma = true
+
+# -----------------------------
+
+# ruff
+
+[tool.ruff]
+line-length = 79
+target-version = "py313"
+fix = true
+
+[tool.ruff.lint]
+select = ["D", "E", "F", "W", "C90", "I"]
+extend-select = ["ERA", "UP", "S"]
+ignore=["D203", "D212", "D413"]
+extend-per-file-ignores = {"tests/*.py" = ["S101"]}
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = false
+
+# -----------------------------
+
+# pydocstyle
+
+[tool.pydocstyle]
+convention = "pep257"
+add-ignore = ["D203", "D213", "D413"]
+
+# -----------------------------
+
+# mypy
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+
+allow_redefinition = false
+disallow_any_generics = true
+disallow_untyped_calls = true
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = true
+show_error_codes = true
+pretty = true
+strict_equality = true
+
+# -----------------------------
+
+[tool.pytype]
+python_version = "3.13"
+strict = true
+inputs = ["src"]
+exclude = ["tests", "venv", ".venv"]
+output = ".pytype"
+output_json = true
+
+# -----------------------------
+
+# pytest
+
+[tool.pytest.ini_options]
+addopts = "-v --tb=short"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
