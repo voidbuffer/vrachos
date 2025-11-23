@@ -3,7 +3,11 @@
 """Main entry point."""
 
 from pathlib import Path
+from types import SimpleNamespace
 
+from pydantic import Field
+
+from vrachos.cli import Command
 from vrachos.configuration import Configuration
 from vrachos.core.io import random_temp_file_path
 from vrachos.logger import logger
@@ -18,9 +22,27 @@ class AppConfig(Configuration):
     timeout: int = 30
 
 
-def main() -> None:
-    """Entrypoint."""
+class AppCommand(Command):
+    """Demo command."""
+
+    NAME = "vrachos"
+
+    verbose: bool = Field(False, description="Verbose output", alias="v")
+    debug: bool = Field(True, description="Debug output", alias="d")
+
+    def on_init(self, args: SimpleNamespace) -> None:
+        """Initialise the command."""
+        ...
+
+    def on_run(self, args: SimpleNamespace) -> None:
+        """Run the command."""
+        print(f"{self.NAME} {self=} {args=}")
+
+
+if __name__ == "__main__":
     UI.init()
+
+    AppCommand.run()
 
     print("Test logger")
     log_filepath = random_temp_file_path(suffix="log")
@@ -38,7 +60,3 @@ def main() -> None:
     config.debug = True
     config.save()  # Atomically write to file
     logger.debug(f"AppConfig filepath = {AppConfig.FILEPATH}")
-
-
-if __name__ == "__main__":
-    main()

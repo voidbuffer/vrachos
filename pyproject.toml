@@ -27,6 +27,9 @@ dependencies = [
     "rich>=14.2.0",
 ]
 
+[project.urls]
+Homepage = "https://pypi.org/project/vrachos/"
+
 [dependency-groups]
 dev = [
     "black>=25.11.0",
@@ -37,9 +40,6 @@ dev = [
     "types-requests>=2.32.4.20250913",
     "typos>=1.39.2",
 ]
-
-[project.urls]
-Homepage = "https://pypi.org/project/vrachos/"
 
 [tool.hatch.version]
 source = "vcs"
