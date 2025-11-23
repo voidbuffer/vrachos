@@ -33,7 +33,6 @@ dev = [
     "isort>=7.0.0",
     "mypy>=1.18.2",
     "pytest>=9.0.1",
-    "pytype>=2024.10.11",
     "ruff>=0.14.5",
     "types-requests>=2.32.4.20250913",
     "typos>=1.39.2",
@@ -88,14 +87,6 @@ keep-runtime-typing = false
 
 # -----------------------------
 
-# pydocstyle
-
-[tool.pydocstyle]
-convention = "pep257"
-add-ignore = ["D203", "D213", "D413"]
-
-# -----------------------------
-
 # mypy
 
 [tool.mypy]
@@ -119,16 +110,6 @@ check_untyped_defs = true
 show_error_codes = true
 pretty = true
 strict_equality = true
-
-# -----------------------------
-
-[tool.pytype]
-python_version = "3.13"
-strict = true
-inputs = ["src"]
-exclude = ["tests", "venv", ".venv"]
-output = ".pytype"
-output_json = true
 
 # -----------------------------
 

@@ -7,21 +7,12 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-illegal-windows-names
 
-  # Typo checker (typos)
+  # Formatter (ruff)
   - repo: local
     hooks:
-      - id: typos
-        name: typos
-        entry: uv run typos
-        language: system
-        types: [python]
-
-  # Import sorter (isort)
-  - repo: local
-    hooks:
-      - id: isort
-        name: isort
-        entry: uv run isort
+      - id: ruff
+        name: ruff
+        entry: uv run ruff format
         language: system
         types: [python]
 
@@ -34,6 +25,15 @@ repos:
         language: system
         types: [python]
 
+  # Import sorter (isort)
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        entry: uv run isort
+        language: system
+        types: [python]
+
   # Type checker (mypy)
   - repo: local
     hooks:
@@ -43,12 +43,21 @@ repos:
         language: system
         types: [python]
 
-  # Code formatter (Black)
+  # Strict code formatter (Black)
   - repo: local
     hooks:
       - id: black
         name: black
         entry: uv run black
+        language: system
+        types: [python]
+
+  # Typo checker (typos)
+  - repo: local
+    hooks:
+      - id: typos
+        name: typos
+        entry: uv run typos
         language: system
         types: [python]
 

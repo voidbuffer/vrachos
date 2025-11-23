@@ -125,7 +125,6 @@ class ModelOps[T: BaseModel]:
 
 
 if __name__ == "__main__":
-
     from ui import UI
 
     class User(BaseModel):

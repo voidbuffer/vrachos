@@ -23,11 +23,12 @@ steps:
   image: python:3.13
   commands:
   - pip install --upgrade pip uv
+  - uv run mypy src
+  - uv run ruff format src
+  - uv run ruff check src
   - uv run isort --check src
   - uv run black --check src
-  - uv run ruff check src
-  - uv run mypy src
-  - uv run pytype src
+  - uv run typos src
 
 - name: Test
   image: python:3.13
